@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -14,7 +13,6 @@ type Film struct {
 }
 
 func main() {
-	fmt.Println("Hello world")
 
 	home_page_handler := func(w http.ResponseWriter, r *http.Request) {
 		templ := template.Must(template.ParseFiles("templates/index.html"))
