@@ -17,7 +17,7 @@ func main() {
 	fmt.Println("Hello world")
 
 	home_page_handler := func(w http.ResponseWriter, r *http.Request) {
-		templ := template.Must(template.ParseFiles("index.html"))
+		templ := template.Must(template.ParseFiles("templates/index.html"))
 
 		films := map[string][]Film{
 			"Films": {
@@ -42,9 +42,15 @@ func main() {
 		title := r.PostFormValue("title")
 		director := r.PostFormValue("director")
 
-		html_string := fmt.Sprintf("<div class='bg-gray-800 p-6 rounded-lg shadow-lg mb-4'><h2 class='text-2xl font-semibold'>%s</h2><p class='text-gray-400'>%s</p></div>", title, director)
-		templ, _ := template.New("t").Parse(html_string)
-		templ.Execute(w, nil)
+		templ := template.Must(template.ParseFiles("templates/index.html"))
+		templ.ExecuteTemplate(
+			w,
+			"film-list-element",
+			Film{
+				Title:    title,
+				Director: director,
+			},
+		)
 	}
 
 	http.HandleFunc("/", home_page_handler)
