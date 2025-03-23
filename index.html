@@ -5,16 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');
+        }
+        .filmy-theme {
+            font-family: 'Cinzel', serif;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-900 text-gray-100 filmy-theme">
     <h1 class="text-4xl font-bold text-center my-8">Films</h1>
-    <div class="container mx-auto px-4">
-        {{ range .Films }}
-            <div class="bg-white p-6 rounded-lg shadow-lg mb-4">
-                <h2 class="text-2xl font-semibold">{{ .Title }}</h2>
-                <p class="text-gray-700">{{ .Director }}</p>
+    <div class="container mx-auto px-4 flex">
+        <div class="w-3/4">
+            {{ range .Films }}
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-4">
+                    <h2 class="text-2xl font-semibold">{{ .Title }}</h2>
+                    <p class="text-gray-400">{{ .Director }}</p>
+                </div>
+            {{ end }}
+        </div>
+        <div class="w-1/4 pl-4">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold mb-4">Add Film</h2>
+                <form action="/add-film" method="POST">
+                    <div class="mb-4">
+                        <label for="title" class="block text-gray-400">Title</label>
+                        <input type="text" id="title" name="title" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-gray-100 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <div class="mb-4">
+                        <label for="director" class="block text-gray-400">Director</label>
+                        <input type="text" id="director" name="director" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-gray-100 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Add</button>
+                    </div>
+                </form>
             </div>
-        {{ end }}
+        </div>
     </div>
 </body>
 </html>
