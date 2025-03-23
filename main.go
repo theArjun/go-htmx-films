@@ -15,7 +15,7 @@ type Film struct {
 func main() {
 	fmt.Println("Hello world")
 
-	handler_one := func(w http.ResponseWriter, r *http.Request) {
+	home_page_handler := func(w http.ResponseWriter, r *http.Request) {
 		templ := template.Must(template.ParseFiles("index.html"))
 
 		films := map[string][]Film{
@@ -24,20 +24,27 @@ func main() {
 				{Title: "Pulp Fiction", Director: "Quentin Tarantino"},
 				{Title: "Inception", Director: "Christopher Nolan"},
 				{Title: "The Dark Knight", Director: "Christopher Nolan"},
-				{Title: "Fight Club", Director: "David Fincher"},
 				{Title: "Forrest Gump", Director: "Robert Zemeckis"},
 				{Title: "The Matrix", Director: "Lana Wachowski, Lilly Wachowski"},
 				{Title: "The Shawshank Redemption", Director: "Frank Darabont"},
-				{Title: "The Lord of the Rings: The Return of the King", Director: "Peter Jackson"},
-				{Title: "Star Wars: Episode IV - A New Hope", Director: "George Lucas"},
-				{Title: "The Silence of the Lambs", Director: "Jonathan Demme"},
 			},
 		}
 
 		templ.Execute(w, films)
 	}
 
-	http.HandleFunc("/", handler_one)
+	add_film_handler := func(w http.ResponseWriter, r *http.Request) {
+		// Extract POST Data
+		title := r.PostFormValue("title")
+		director := r.PostFormValue("director")
+
+		html_string := fmt.Sprintf("<div class='bg-gray-800 p-6 rounded-lg shadow-lg mb-4'><h2 class='text-2xl font-semibold'>%s</h2><p class='text-gray-400'>%s</p></div>", title, director)
+		templ, _ := template.New("t").Parse(html_string)
+		templ.Execute(w, nil)
+	}
+
+	http.HandleFunc("/", home_page_handler)
+	http.HandleFunc("/add-film/", add_film_handler)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
