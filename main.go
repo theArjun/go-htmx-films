@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Film struct {
@@ -34,6 +35,9 @@ func main() {
 	}
 
 	add_film_handler := func(w http.ResponseWriter, r *http.Request) {
+		// Simulate latency
+		time.Sleep(1 * time.Second)
+
 		// Extract POST Data
 		title := r.PostFormValue("title")
 		director := r.PostFormValue("director")
