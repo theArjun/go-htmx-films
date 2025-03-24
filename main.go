@@ -14,7 +14,7 @@ type Film struct {
 
 func main() {
 
-	home_page_handler := func(w http.ResponseWriter, r *http.Request) {
+	homePageHandler := func(w http.ResponseWriter, r *http.Request) {
 		templ := template.Must(template.ParseFiles("templates/index.html"))
 
 		films := map[string][]Film{
@@ -29,10 +29,14 @@ func main() {
 			},
 		}
 
-		templ.Execute(w, films)
+		err := templ.Execute(w, films)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
 	}
 
-	add_film_handler := func(w http.ResponseWriter, r *http.Request) {
+	addFilmHandler := func(w http.ResponseWriter, r *http.Request) {
 		// Simulate latency
 		time.Sleep(1 * time.Second)
 
@@ -41,7 +45,7 @@ func main() {
 		director := r.PostFormValue("director")
 
 		templ := template.Must(template.ParseFiles("templates/index.html"))
-		templ.ExecuteTemplate(
+		err := templ.ExecuteTemplate(
 			w,
 			"film-list-element",
 			Film{
@@ -49,10 +53,14 @@ func main() {
 				Director: director,
 			},
 		)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
 	}
 
-	http.HandleFunc("/", home_page_handler)
-	http.HandleFunc("/add-film/", add_film_handler)
+	http.HandleFunc("/", homePageHandler)
+	http.HandleFunc("/add-film/", addFilmHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
